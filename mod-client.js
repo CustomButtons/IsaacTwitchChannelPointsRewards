@@ -1,23 +1,19 @@
-var net = require('net');
+const fs = require('fs');
+const config = require('./config.json');
+console.log('config', config);
 
-var client = new net.Socket();
-client.setEncoding('utf8');
+if (fs.existsSync(config.commandListFile)) {
+    const commandListFileContent = fs.readFileSync(config.commandListFile, 'utf8');
+    const commandArray = commandListFileContent.split('\r\n');
+    setInterval(() => {
+        const randomCommand = commandArray[getRandomInt(0, commandArray.length)];
+        console.log('randomCommand', randomCommand);
+        fs.writeFileSync(file, randomCommand);
+    }, 5000);
+}
 
-client.connect(8666, '127.0.0.1', function() {
-	console.log('TCP connected');
-	console.log('TCP send command');
-    client.write(JSON.stringify({
-        m: 'out'
-    }));
-    client.write(JSON.stringify({
-        m: 'getItems'
-    }));
-});
-
-client.on('data', function(data) {
-	console.log('TCP received: ' + data);
-});
-
-client.on('close', function() {
-	console.log('TCP connection closed');
-});
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
