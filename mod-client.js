@@ -8,7 +8,7 @@ if (fs.existsSync(config.commandListFile)) {
     setInterval(() => {
         const randomCommand = commandArray[getRandomInt(0, commandArray.length)];
         console.log('randomCommand', randomCommand);
-        fs.writeFileSync(config.dispatchFile, randomCommand);
+        fs.appendFileSync(config.dispatchFile, `${randomCommand}\r\n`);
     }, 5000);
 }
 
